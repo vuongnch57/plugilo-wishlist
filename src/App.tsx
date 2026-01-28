@@ -1,35 +1,19 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Dock } from './components/Dock/Dock';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
+    <div className="App">
+      <h1>Example Website Content</h1>
+      <p style={{ maxWidth: '600px', margin: '0 auto', lineHeight: '1.6' }}>
+        This is a placeholder website to demonstrate the floating Dock widget.
+        Scroll down or interact with the page to see the widget stays fixed.
       </p>
-    </>
-  )
+      
+      {/* The Widget */}
+      <Dock />
+    </div>
+  );
 }
 
-export default App
+export default App;

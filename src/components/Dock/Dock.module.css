@@ -1,0 +1,209 @@
+.dockContainer {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  font-family: 'Inter', system-ui, sans-serif;
+  pointer-events: none; /* Allow clicking through when minimized if we separate them, but here the container IS the dock */
+  width: auto;
+  max-width: 90vw;
+}
+
+/* The actual bar */
+.dockBar {
+  pointer-events: auto;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 0, 0, 0.08); /* Subtle border */
+  border-radius: 20px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0,0,0,0.02); /* Inner stroke simulation */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.brandSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-right: 8px;
+  color: #1a1a1a;
+}
+
+.brandIcon {
+  background: #1a1a1a;
+  color: #fff;
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+}
+
+.brandName {
+  font-size: 10px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.stacksScrollArea {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 4px 4px;
+  /* Hide scrollbar */
+  scrollbar-width: none; 
+  -ms-overflow-style: none;
+}
+
+.stacksScrollArea::-webkit-scrollbar {
+  display: none;
+}
+
+.stackItem {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: #f3f4f6;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.stackItem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.stackItem.active {
+  border-color: #007AFF; /* Apple blue or similar primary */
+  background: #fff;
+}
+
+.stackItem.addStack {
+  background: transparent;
+  border: 2px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+}
+
+.stackItem.addStack:hover {
+  border-color: #999;
+  color: #333;
+}
+
+.stackLabel {
+  font-size: 9px;
+  text-align: center;
+  margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 50px;
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0.7;
+}
+
+.actionsSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-left: 8px; 
+  color: #666;
+}
+
+.actionButton {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333; /* Enforce dark color */
+}
+
+.actionButton:hover {
+  background: rgba(0,0,0,0.05);
+  color: #000;
+}
+
+/* Minimized State (Bubble) */
+.minimizedButton {
+  position: relative;
+  pointer-events: auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  background: #1a1a1a;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  cursor: pointer;
+  border: none;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #ff3b30;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  height: 18px;
+  width: 18px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  z-index: 10;
+}
+
+.minimizedButton:hover {
+  transform: scale(1.1);
+}
+
+:global([data-theme='dark']) .dockBar {
+  background: rgba(30, 30, 30, 0.85);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+:global([data-theme='dark']) .brandSection {
+  color: #fff;
+}
+
+:global([data-theme='dark']) .stackItem {
+  background: #333;
+}
+
+:global([data-theme='dark']) .stackItem.active {
+  background: #444;
+}
