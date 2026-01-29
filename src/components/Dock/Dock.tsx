@@ -1,22 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Plus, Search, Minus, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Star, Plus, Search, Minus, ChevronLeft, ChevronRight, Heart, Gift, Zap, Book, Music, Coffee, Smile } from 'lucide-react';
 import { useStore } from '../../store/useStore';
+import { CreateStackPopover } from './CreateStackPopover';
 import styles from './Dock.module.css';
 import clsx from 'clsx';
 
+const ICONS_MAP: Record<string, React.ElementType> = {
+  star: Star,
+  heart: Heart,
+  gift: Gift,
+  zap: Zap,
+  book: Book,
+  music: Music,
+  coffee: Coffee,
+  smile: Smile,
+};
+
 export const Dock: React.FC = () => {
-  const { itemsOpen, toggleDock } = useStore();
+  const { itemsOpen, toggleDock, stacks, activeStackId, setActiveStack, addStack } = useStore();
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
   
-  // Mock Stacks for visualization
-  const stacks = [
-    { id: '1', title: 'Summer' },
-    { id: '2', title: 'Tech' },
-    { id: '3', title: 'Gifts' },
-    { id: '4', title: 'Books' },
-    { id: '5', title: 'Ideas' },
-  ];
-  const activeStackId = '2';
+  const handleCreateStack = (title: string, cover: string) => {
+    addStack(title, cover);
+  };
 
   return (
     <div className={styles.dockContainer}>
@@ -42,28 +49,38 @@ export const Dock: React.FC = () => {
 
             {/* Stacks Scroll Area */}
             <div className={styles.stacksScrollArea}>
-              {stacks.map((stack) => (
-                <div key={stack.id} style={{ position: 'relative' }}>
-                  <motion.div
-                    className={clsx(styles.stackItem, stack.id === activeStackId && styles.active)}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  />
-                  <div className={styles.stackLabel}>{stack.title}</div>
-                </div>
-              ))}
-
-              {/* Add Stack Button */}
-              <motion.button
-                className={clsx(styles.stackItem, styles.addStack)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Plus size={20} />
-              </motion.button>
+              {stacks.map((stack) => {
+                const IconComponent = stack.cover && ICONS_MAP[stack.cover] ? ICONS_MAP[stack.cover] : Star;
+                return (
+                  <div key={stack.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <motion.div
+                      className={clsx(styles.stackItem, stack.id === activeStackId && styles.active)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setActiveStack(stack.id)}
+                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                       <IconComponent size={24} color={activeStackId === stack.id ? '#007AFF' : '#666'} />
+                    </motion.div>
+                    <div className={styles.stackLabel}>{stack.title}</div>
+                  </div>
+                );
+              })}
             </div>
 
             <ChevronRight size={16} className={styles.chevron} />
+
+            <div className={styles.divider} />
+
+            {/* Add Stack Button - Fixed */}
+            <motion.button
+              className={clsx(styles.stackItem, styles.addStack)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsCreateOpen(true)}
+            >
+              <Plus size={20} />
+            </motion.button>
 
             {/* Actions Section */}
             <div className={styles.actionsSection}>
@@ -74,6 +91,13 @@ export const Dock: React.FC = () => {
                 <Minus size={18} />
               </button>
             </div>
+
+            {/* Popover placed here to avoid overflow clipping */}
+            <CreateStackPopover 
+              isOpen={isCreateOpen} 
+              onClose={() => setIsCreateOpen(false)} 
+              onCreate={handleCreateStack}
+            />
           </motion.div>
         ) : (
           <motion.button

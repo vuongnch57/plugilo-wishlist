@@ -57,10 +57,10 @@
 
 .stacksScrollArea {
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* Align top so they don't stretch */
   gap: 12px;
   overflow-x: auto;
-  padding: 4px 4px;
+  padding: 4px 4px 8px 4px; /* Add some bottom padding for scrollbar space if needed, though hidden */
   /* Hide scrollbar */
   scrollbar-width: none; 
   -ms-overflow-style: none;
@@ -108,18 +108,19 @@
 }
 
 .stackLabel {
-  font-size: 9px;
+  font-size: 10px;
   text-align: center;
-  margin-top: 4px;
+  margin-top: 6px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 50px;
-  position: absolute;
-  bottom: -16px;
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 0.7;
+  max-width: 60px;
+  opacity: 0.8;
+  color: var(--color-text-secondary);
+}
+
+:global([data-theme='dark']) .stackLabel {
+  color: #ccc;
 }
 
 .actionsSection {
@@ -142,6 +143,17 @@
   align-items: center;
   justify-content: center;
   color: #333;
+}
+
+.divider {
+  width: 1px;
+  height: 32px;
+  background-color: rgba(0,0,0,0.1);
+  margin: 0 4px;
+}
+
+:global([data-theme='dark']) .divider {
+  background-color: rgba(255,255,255,0.15);
 }
 
 .actionButton:hover {
