@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Plus, Search, Minus, ChevronLeft, ChevronRight, Heart, Gift, Zap, Book, Music, Coffee, Smile } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { CreateStackPopover } from './CreateStackPopover';
+import { CreateCardPopover } from './CreateCardPopover';
+import { CreateMenuPopover } from './CreateMenuPopover';
 import styles from './Dock.module.css';
 import clsx from 'clsx';
 
@@ -17,12 +19,20 @@ const ICONS_MAP: Record<string, React.ElementType> = {
   smile: Smile,
 };
 
+type ActivePopover = 'none' | 'menu' | 'stack' | 'card';
+
 export const Dock: React.FC = () => {
-  const { itemsOpen, toggleDock, stacks, activeStackId, setActiveStack, addStack } = useStore();
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const { itemsOpen, toggleDock, stacks, activeStackId, setActiveStack, addStack, addCard } = useStore();
+  const [activePopover, setActivePopover] = useState<ActivePopover>('none');
   
   const handleCreateStack = (title: string, cover: string) => {
     addStack(title, cover);
+    setActivePopover('none');
+  };
+
+  const handleCreateCard = (stackId: string, title: string, description: string, cover: string) => {
+    addCard(stackId, title, description, cover);
+    setActivePopover('none');
   };
 
   return (
@@ -72,12 +82,12 @@ export const Dock: React.FC = () => {
 
             <div className={styles.divider} />
 
-            {/* Add Stack Button - Fixed */}
+            {/* Add Stack/Card Button */}
             <motion.button
               className={clsx(styles.stackItem, styles.addStack)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => setIsCreateOpen(true)}
+              onClick={() => setActivePopover(activePopover === 'none' ? 'menu' : 'none')}
             >
               <Plus size={20} />
             </motion.button>
@@ -92,11 +102,28 @@ export const Dock: React.FC = () => {
               </button>
             </div>
 
-            {/* Popover placed here to avoid overflow clipping */}
-            <CreateStackPopover 
-              isOpen={isCreateOpen} 
-              onClose={() => setIsCreateOpen(false)} 
+            {/* Popovers */}
+            <div style={{ position: 'absolute', bottom: '100%', right: '60px' }}>
+                <CreateMenuPopover 
+                    isOpen={activePopover === 'menu'} 
+                    onClose={() => setActivePopover('none')}
+                    onSelectStack={() => setActivePopover('stack')}
+                    onSelectCard={() => setActivePopover('card')}
+                />
+            </div>
+            
+             <CreateStackPopover 
+              isOpen={activePopover === 'stack'} 
+              onClose={() => setActivePopover('none')} 
               onCreate={handleCreateStack}
+            />
+
+            <CreateCardPopover 
+              isOpen={activePopover === 'card'} 
+              onClose={() => setActivePopover('none')} 
+              onCreate={handleCreateCard}
+              stacks={stacks}
+              activeStackId={activeStackId}
             />
           </motion.div>
         ) : (

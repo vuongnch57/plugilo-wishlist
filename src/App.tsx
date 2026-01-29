@@ -1,4 +1,5 @@
 import { Dock } from './components/Dock/Dock';
+import { StackView } from './components/StackView/StackView';
 import { useTheme } from './hooks/useTheme';
 import { useStore } from './store/useStore';
 import './App.css';
@@ -9,6 +10,9 @@ function App() {
 
   return (
     <div className="App">
+      {/* Active Stack View Overlay */}
+      <StackView />
+
       <h1>Global Theming Setup</h1>
       <p style={{ maxWidth: '600px', margin: '0 auto', lineHeight: '1.6', color: 'var(--color-text-secondary)' }}>
         Current Theme: <strong>{theme}</strong>
