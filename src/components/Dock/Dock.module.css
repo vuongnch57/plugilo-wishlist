@@ -137,15 +137,25 @@
   cursor: pointer;
   padding: 4px;
   border-radius: 50%;
-  transition: background 0.2s;
+  transition: background 0.2s, color 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #333; /* Enforce dark color */
+  color: #333;
 }
 
 .actionButton:hover {
   background: rgba(0,0,0,0.05);
+  color: #000;
+}
+
+.chevron {
+  cursor: pointer;
+  color: #333;
+  transition: color 0.2s;
+}
+
+.chevron:hover {
   color: #000;
 }
 
@@ -202,8 +212,19 @@
 
 :global([data-theme='dark']) .stackItem {
   background: #333;
+  color: #ccc;
 }
-
 :global([data-theme='dark']) .stackItem.active {
   background: #444;
+}
+
+:global([data-theme='dark']) .actionButton,
+:global([data-theme='dark']) .chevron {
+  color: #fff;
+}
+
+:global([data-theme='dark']) .actionButton:hover,
+:global([data-theme='dark']) .chevron:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
 }

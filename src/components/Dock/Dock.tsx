@@ -38,7 +38,7 @@ export const Dock: React.FC = () => {
               <span className={styles.brandName}>plugilo</span>
             </div>
 
-            <ChevronLeft size={16} color="#333" style={{ cursor: 'pointer' }} />
+            <ChevronLeft size={16} className={styles.chevron} />
 
             {/* Stacks Scroll Area */}
             <div className={styles.stacksScrollArea}>
@@ -63,7 +63,7 @@ export const Dock: React.FC = () => {
               </motion.button>
             </div>
 
-            <ChevronRight size={16} color="#333" style={{ cursor: 'pointer' }} />
+            <ChevronRight size={16} className={styles.chevron} />
 
             {/* Actions Section */}
             <div className={styles.actionsSection}>

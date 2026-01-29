@@ -1,68 +1,105 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* 
+   * Design Tokens 
+   * Using HSL for easier color manipulation and theming
+   */
+  
+  /* Primary Brand Color: Bright Blue (Apple/Vercel style) */
+  --primary-h: 211;
+  --primary-s: 100%;
+  --primary-l: 50%;
+  --color-primary: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
+  --color-primary-hover: hsl(var(--primary-h), var(--primary-s), 45%);
+  --color-primary-light: hsl(var(--primary-h), var(--primary-s), 96%);
+
+  /* Functional Colors */
+  --color-danger: #FF3B30;
+  --color-success: #34C759;
+  --color-warning: #FF9500;
+
+  /* Light Mode Defaults */
+  --bg-h: 210;
+  --bg-s: 20%;
+  --bg-l: 98%;
+  
+  --color-bg: hsl(var(--bg-h), var(--bg-s), var(--bg-l)); /* #F5F7FA */
+  --color-surface: #FFFFFF;
+  --color-surface-translucent: rgba(255, 255, 255, 0.8);
+  
+  --color-text-main: #1A1A1A;
+  --color-text-secondary: #666666;
+  --color-text-tertiary: #999999;
+  
+  --color-border: rgba(0, 0, 0, 0.08);
+  --color-divider: rgba(0, 0, 0, 0.05);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --shadow-modal: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  font-family: var(--font-sans);
   line-height: 1.5;
   font-weight: 400;
-
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* Dark Mode Implementation */
+[data-theme='dark'] {
+  --color-bg: #000000;
+  --color-surface: #1C1C1E;
+  --color-surface-translucent: rgba(28, 28, 30, 0.8);
+  
+  --color-text-main: #FFFFFF;
+  --color-text-secondary: #EBEBF599; /* ~60% white */
+  --color-text-tertiary: #EBEBF54D; /* ~30% white */
+  
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-divider: rgba(255, 255, 255, 0.08);
+  
+  --color-primary-light: rgba(10, 132, 255, 0.15); /* Adjusted for dark mode */
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #f0f2f5;
-  color: #333;
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
+/* Global Reset Utilities */
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.2s ease-in-out;
 }
