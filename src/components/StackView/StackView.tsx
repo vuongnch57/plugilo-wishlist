@@ -7,7 +7,7 @@ import styles from './StackView.module.css';
 import clsx from 'clsx';
 
 export const StackView: React.FC = () => {
-  const { activeStackId, allCards, stacks, setActiveStack, removeCard } = useStore();
+  const { activeStackId, allCards, stacks, itemsOpen, setActiveStack, removeCard } = useStore();
   const [orderedCards, setOrderedCards] = useState<Card[]>([]);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -32,8 +32,8 @@ export const StackView: React.FC = () => {
     setOrderedCards(sourceCards);
   }
 
-  // Close if no active stack
-  if (!activeStackId) return null;
+  // Close if no active stack or dock is minimized
+  if (!activeStackId || !itemsOpen) return null;
 
   const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo, cardId: string) => {
     setIsDragging(false);

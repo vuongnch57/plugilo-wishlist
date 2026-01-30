@@ -38,7 +38,7 @@ export const useStore = create<StoreState>()(
       error: null,
       isLoading: false,
 
-      toggleDock: () => set((state) => ({ itemsOpen: !state.itemsOpen })),
+      toggleDock: () => set((state) => ({ itemsOpen: !state.itemsOpen, activeStackId: null })),
       setTheme: (theme) => set({ theme }),
       setActiveStack: (id) => set({ activeStackId: id }),
 
