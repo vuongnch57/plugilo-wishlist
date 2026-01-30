@@ -6,6 +6,7 @@ import { CreateStackPopover } from './CreateStackPopover';
 import { CreateCardPopover } from './CreateCardPopover';
 import { CreateMenuPopover } from './CreateMenuPopover';
 import styles from './Dock.module.css';
+import { SearchPopover } from './SearchPopover';
 import clsx from 'clsx';
 
 const ICONS_MAP: Record<string, React.ElementType> = {
@@ -19,12 +20,26 @@ const ICONS_MAP: Record<string, React.ElementType> = {
   smile: Smile,
 };
 
-type ActivePopover = 'none' | 'menu' | 'stack' | 'card';
+type ActivePopover = 'none' | 'menu' | 'stack' | 'card' | 'search';
 
 export const Dock: React.FC = () => {
-  const { itemsOpen, toggleDock, stacks, activeStackId, dragOverStackId, setActiveStack, addStack, addCard } = useStore();
+  const { itemsOpen, toggleDock, stacks, activeStackId, dragOverStackId, setActiveStack, addStack, addCard, allCards } = useStore();
   const [activePopover, setActivePopover] = useState<ActivePopover>('none');
+  const [searchQuery, setSearchQuery] = useState('');
   const scrollRef = React.useRef<HTMLDivElement>(null);
+
+  const filteredStacks = React.useMemo(() => {
+    if (!searchQuery.trim()) return stacks;
+    const lowerQuery = searchQuery.toLowerCase();
+    return stacks.filter(stack => {
+       const titleMatch = stack.title.toLowerCase().includes(lowerQuery);
+       const hasMatchingCard = stack.cardIds?.some(cid => {
+          const card = allCards.find(c => c.id === cid);
+          return card && (card.title.toLowerCase().includes(lowerQuery) || card.description?.toLowerCase().includes(lowerQuery));
+       });
+       return titleMatch || hasMatchingCard;
+    });
+  }, [stacks, allCards, searchQuery]);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -66,7 +81,7 @@ export const Dock: React.FC = () => {
 
             {/* Stacks Scroll Area */}
             <div className={styles.stacksScrollArea} ref={scrollRef}>
-              {stacks.map((stack) => {
+              {filteredStacks.map((stack) => {
                 const IconComponent = stack.cover && ICONS_MAP[stack.cover] ? ICONS_MAP[stack.cover] : Star;
                 const isDragTarget = stack.id === dragOverStackId;
                 return (
@@ -108,7 +123,10 @@ export const Dock: React.FC = () => {
 
             {/* Actions Section */}
             <div className={styles.actionsSection}>
-              <button className={styles.actionButton}>
+              <button 
+                className={clsx(styles.actionButton, activePopover === 'search' && styles.active)}
+                onClick={() => setActivePopover(activePopover === 'search' ? 'none' : 'search')}
+              >
                 <Search size={18} />
               </button>
               <button className={styles.actionButton} onClick={toggleDock}>
@@ -117,6 +135,13 @@ export const Dock: React.FC = () => {
             </div>
 
             {/* Popovers */}
+            <SearchPopover 
+                isOpen={activePopover === 'search'} 
+                onClose={() => { setActivePopover('none'); setSearchQuery(''); }}
+                query={searchQuery}
+                onQueryChange={setSearchQuery}
+            />
+
             <div style={{ position: 'absolute', bottom: '100%', right: '60px' }}>
                 <CreateMenuPopover 
                     isOpen={activePopover === 'menu'} 
