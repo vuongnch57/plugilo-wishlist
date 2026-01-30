@@ -11,6 +11,7 @@ interface StoreState {
   
   // UI State
   activeStackId: string | null;
+  dragOverStackId: string | null;
   error: string | null;
   isLoading: boolean;
 
@@ -18,6 +19,7 @@ interface StoreState {
   toggleDock: () => void;
   setTheme: (theme: Theme) => void;
   setActiveStack: (id: string | null) => void;
+  setDragOverStackId: (id: string | null) => void;
   
   addStack: (title: string, cover?: string) => void;
   removeStack: (id: string) => void;
@@ -35,12 +37,14 @@ export const useStore = create<StoreState>()(
       stacks: [],
       allCards: [],
       activeStackId: null,
+      dragOverStackId: null,
       error: null,
       isLoading: false,
 
       toggleDock: () => set((state) => ({ itemsOpen: !state.itemsOpen, activeStackId: null })),
       setTheme: (theme) => set({ theme }),
       setActiveStack: (id) => set({ activeStackId: id }),
+      setDragOverStackId: (id) => set({ dragOverStackId: id }),
 
       addStack: (title, cover) => {
         const newStack: Stack = {

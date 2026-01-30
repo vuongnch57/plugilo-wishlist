@@ -22,7 +22,7 @@ const ICONS_MAP: Record<string, React.ElementType> = {
 type ActivePopover = 'none' | 'menu' | 'stack' | 'card';
 
 export const Dock: React.FC = () => {
-  const { itemsOpen, toggleDock, stacks, activeStackId, setActiveStack, addStack, addCard } = useStore();
+  const { itemsOpen, toggleDock, stacks, activeStackId, dragOverStackId, setActiveStack, addStack, addCard } = useStore();
   const [activePopover, setActivePopover] = useState<ActivePopover>('none');
   const scrollRef = React.useRef<HTMLDivElement>(null);
 
@@ -68,16 +68,23 @@ export const Dock: React.FC = () => {
             <div className={styles.stacksScrollArea} ref={scrollRef}>
               {stacks.map((stack) => {
                 const IconComponent = stack.cover && ICONS_MAP[stack.cover] ? ICONS_MAP[stack.cover] : Star;
+                const isDragTarget = stack.id === dragOverStackId;
                 return (
                   <div key={stack.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <motion.div
                       className={clsx(styles.stackItem, stack.id === activeStackId && styles.active)}
                       whileHover={{ scale: 1.05 }}
+                      animate={{ 
+                        scale: isDragTarget ? 1.2 : 1,
+                        borderColor: isDragTarget ? '#007AFF' : (stack.id === activeStackId ? '#007AFF' : 'transparent'),
+                        backgroundColor: isDragTarget ? '#007AFF' : undefined
+                      }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setActiveStack(stack.id)}
+                      data-stack-id={stack.id}
                       style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                     >
-                       <IconComponent size={24} color={activeStackId === stack.id ? '#007AFF' : '#666'} />
+                       <IconComponent size={24} color={isDragTarget ? '#FFF' : (activeStackId === stack.id ? '#007AFF' : '#666')} />
                     </motion.div>
                     <div className={styles.stackLabel}>{stack.title}</div>
                   </div>

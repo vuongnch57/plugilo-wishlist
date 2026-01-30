@@ -7,7 +7,7 @@ import styles from './StackView.module.css';
 import clsx from 'clsx';
 
 export const StackView: React.FC = () => {
-  const { activeStackId, allCards, stacks, itemsOpen, setActiveStack, removeCard } = useStore();
+  const { activeStackId, allCards, stacks, itemsOpen, setActiveStack, removeCard, moveCardToStack, dragOverStackId, setDragOverStackId } = useStore();
   const [orderedCards, setOrderedCards] = useState<Card[]>([]);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -37,13 +37,34 @@ export const StackView: React.FC = () => {
 
   const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo, cardId: string) => {
     setIsDragging(false);
+    setDragOverStackId(null);
     const { x, y } = info.offset;
+    
+    // Get drop coordinates safely
+    // @ts-ignore
+    const clientX = event.clientX ?? event.changedTouches?.[0]?.clientX;
+    // @ts-ignore
+    const clientY = event.clientY ?? event.changedTouches?.[0]?.clientY;
+
+    // Check if dropped on a stack
+    if (clientX && clientY) {
+      const elements = document.elementsFromPoint(clientX, clientY);
+      const stackElement = elements.find(el => el.getAttribute('data-stack-id'));
+      
+      if (stackElement) {
+        const targetId = stackElement.getAttribute('data-stack-id');
+        if (targetId && targetId !== activeStackId) {
+          moveCardToStack(cardId, targetId);
+          return; // Card moved, no further action needed (auto-removes from view)
+        }
+      }
+    }
 
     // Drag Up to Delete
     if (y < -150) {
       removeCard(cardId);
     }
-    // Drag Down to Close
+    // Drag Down to Close (only if not moved)
     else if (y > 150) {
        setActiveStack(null);
     }
@@ -61,6 +82,21 @@ export const StackView: React.FC = () => {
          const rest = prev.slice(0, prev.length - 1);
          return [last, ...rest];
        });
+    }
+  };
+
+  const handleDrag = (_: any, info: PanInfo) => {
+    // Detect drag over
+    // @ts-ignore
+    const point = info.point;
+    const elements = document.elementsFromPoint(point.x, point.y);
+    const stackElement = elements.find(el => el.getAttribute('data-stack-id'));
+    const targetId = stackElement ? stackElement.getAttribute('data-stack-id') : null;
+    
+    if (targetId && targetId !== activeStackId) {
+        if (dragOverStackId !== targetId) setDragOverStackId(targetId);
+    } else {
+        if (dragOverStackId !== null) setDragOverStackId(null);
     }
   };
 
@@ -105,11 +141,12 @@ export const StackView: React.FC = () => {
                     opacity: 1,
                   }}
                   drag={isTop ? true : false}
-                  dragConstraints={{ top: 0, bottom: 0, left: 0, right: 0 }} // Snap back if released
-                  dragElastic={0.2}
+                  dragSnapToOrigin
+                  dragElastic={1}
                   onDragStart={() => isTop && setIsDragging(true)}
+                  onDrag={isTop ? handleDrag : undefined}
                   onDragEnd={(e, info) => isTop && handleDragEnd(e, info, card.id)}
-                  whileDrag={{ scale: 1.05, rotate: 0 }}
+                  whileDrag={{ scale: 0.4, rotate: 0 }}
                   layout
                 >
                   <div className={styles.cardContent}>
