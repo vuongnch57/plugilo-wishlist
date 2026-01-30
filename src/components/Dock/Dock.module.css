@@ -64,6 +64,7 @@
   /* Hide scrollbar */
   scrollbar-width: none; 
   -ms-overflow-style: none;
+  max-width: 360px; /* Limit to approx 6 items (48*6 + 12*5 + padding) */
 }
 
 .stacksScrollArea::-webkit-scrollbar {

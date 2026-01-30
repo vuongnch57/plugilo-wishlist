@@ -24,6 +24,13 @@ type ActivePopover = 'none' | 'menu' | 'stack' | 'card';
 export const Dock: React.FC = () => {
   const { itemsOpen, toggleDock, stacks, activeStackId, setActiveStack, addStack, addCard } = useStore();
   const [activePopover, setActivePopover] = useState<ActivePopover>('none');
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: direction === 'left' ? -200 : 200, behavior: 'smooth' });
+    }
+  };
   
   const handleCreateStack = (title: string, cover: string) => {
     addStack(title, cover);
@@ -55,10 +62,10 @@ export const Dock: React.FC = () => {
               <span className={styles.brandName}>plugilo</span>
             </div>
 
-            <ChevronLeft size={16} className={styles.chevron} />
+            <ChevronLeft size={16} className={styles.chevron} onClick={() => scroll('left')} />
 
             {/* Stacks Scroll Area */}
-            <div className={styles.stacksScrollArea}>
+            <div className={styles.stacksScrollArea} ref={scrollRef}>
               {stacks.map((stack) => {
                 const IconComponent = stack.cover && ICONS_MAP[stack.cover] ? ICONS_MAP[stack.cover] : Star;
                 return (
@@ -78,7 +85,7 @@ export const Dock: React.FC = () => {
               })}
             </div>
 
-            <ChevronRight size={16} className={styles.chevron} />
+            <ChevronRight size={16} className={styles.chevron} onClick={() => scroll('right')} />
 
             <div className={styles.divider} />
 
