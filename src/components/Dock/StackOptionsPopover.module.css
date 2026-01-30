@@ -1,0 +1,108 @@
+.popover {
+  position: fixed; /* Fixed to allow precise positioning relative to viewport */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 
+    0 10px 40px -10px rgba(0,0,0,0.1),
+    0 0 0 1px rgba(0,0,0,0.05);
+  z-index: 10000;
+  width: 140px;
+  margin-top: -10px;
+}
+
+.popover::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.95) transparent transparent transparent;
+}
+
+:global([data-theme='dark']) .popover::after {
+  border-color: rgba(30, 30, 30, 0.95) transparent transparent transparent;
+}
+
+:global([data-theme='dark']) .popover {
+  background: rgba(30, 30, 30, 0.95);
+  box-shadow: 
+    0 10px 40px -10px rgba(0,0,0,0.3),
+    0 0 0 1px rgba(255,255,255,0.1);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px 8px 4px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    margin-bottom: 4px;
+}
+
+:global([data-theme='dark']) .header {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.title {
+    font-size: 12px;
+    font-weight: 500;
+    color: #999;
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+}
+
+.closeButton:hover {
+    color: #666;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: background 0.2s;
+}
+
+:global([data-theme='dark']) .menuItem {
+  color: #eee;
+}
+
+.menuItem:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+:global([data-theme='dark']) .menuItem:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.menuItem.delete {
+  color: #ff3b30;
+}
+
+.menuItem.delete:hover {
+  background: rgba(255, 59, 48, 0.1);
+}

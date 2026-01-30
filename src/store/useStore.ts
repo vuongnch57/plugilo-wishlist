@@ -23,6 +23,7 @@ interface StoreState {
   
   addStack: (title: string, cover?: string) => void;
   removeStack: (id: string) => void;
+  updateStack: (id: string, title: string, cover?: string) => void;
   
   addCard: (stackId: string, title: string, description?: string, cover?: string) => void;
   removeCard: (id: string) => void;
@@ -62,6 +63,14 @@ export const useStore = create<StoreState>()(
         set((state) => ({ 
           stacks: state.stacks.filter((s) => s.id !== id),
           allCards: state.allCards.filter((c) => c.stackId !== id)
+        }));
+      },
+
+      updateStack: (id, title, cover) => {
+        set((state) => ({
+          stacks: state.stacks.map(s => 
+            s.id === id ? { ...s, title, cover: cover ?? s.cover } : s
+          )
         }));
       },
 

@@ -7,7 +7,9 @@ import { CreateCardPopover } from './CreateCardPopover';
 import { CreateMenuPopover } from './CreateMenuPopover';
 import styles from './Dock.module.css';
 import { SearchPopover } from './SearchPopover';
+import { StackOptionsPopover } from './StackOptionsPopover';
 import clsx from 'clsx';
+import { MoreHorizontal } from 'lucide-react';
 
 const ICONS_MAP: Record<string, React.ElementType> = {
   star: Star,
@@ -23,9 +25,10 @@ const ICONS_MAP: Record<string, React.ElementType> = {
 type ActivePopover = 'none' | 'menu' | 'stack' | 'card' | 'search';
 
 export const Dock: React.FC = () => {
-  const { itemsOpen, toggleDock, stacks, activeStackId, dragOverStackId, setActiveStack, addStack, addCard, allCards } = useStore();
+  const { itemsOpen, toggleDock, stacks, activeStackId, dragOverStackId, setActiveStack, addStack, addCard, allCards, removeStack, updateStack } = useStore();
   const [activePopover, setActivePopover] = useState<ActivePopover>('none');
   const [searchQuery, setSearchQuery] = useState('');
+  const [stackOptions, setStackOptions] = useState<{ id: string, x: number, y: number } | null>(null);
   const scrollRef = React.useRef<HTMLDivElement>(null);
 
   const filteredStacks = React.useMemo(() => {
@@ -101,7 +104,16 @@ export const Dock: React.FC = () => {
                     >
                        <IconComponent size={24} color={isDragTarget ? '#FFF' : (activeStackId === stack.id ? '#007AFF' : '#666')} />
                     </motion.div>
-                    <div className={styles.stackLabel}>{stack.title}</div>
+                    <div className={styles.stackLabelWrapper}>
+                       <div className={styles.stackLabel}>{stack.title}</div>
+                       <button className={styles.optionsButton} onClick={(e) => {
+                          e.stopPropagation();
+                          const rect = e.currentTarget.getBoundingClientRect();
+                          setStackOptions({ id: stack.id, x: rect.left + rect.width / 2, y: rect.top });
+                       }}>
+                         <MoreHorizontal size={12} />
+                       </button>
+                    </div>  
                   </div>
                 );
               })}
@@ -140,6 +152,21 @@ export const Dock: React.FC = () => {
                 onClose={() => { setActivePopover('none'); setSearchQuery(''); }}
                 query={searchQuery}
                 onQueryChange={setSearchQuery}
+            />
+
+            <StackOptionsPopover 
+              isOpen={!!stackOptions}
+              position={stackOptions ? { x: stackOptions.x, y: stackOptions.y } : { x: 0, y: 0 }}
+              onClose={() => setStackOptions(null)}
+              onEdit={() => {
+                 setStackOptions(null);
+                 // Edit logic to be implemented or connected to CreateStackPopover
+                 alert("Edit feature coming soon!"); 
+              }}
+              onDelete={() => {
+                 if (stackOptions) removeStack(stackOptions.id);
+                 setStackOptions(null);
+              }}
             />
 
             <div style={{ position: 'absolute', bottom: '100%', right: '60px' }}>
