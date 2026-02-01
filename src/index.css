@@ -26,9 +26,9 @@
   --color-surface: #FFFFFF;
   --color-surface-translucent: rgba(255, 255, 255, 0.8);
   
-  --color-text-main: #1A1A1A;
-  --color-text-secondary: #666666;
-  --color-text-tertiary: #999999;
+  --color-text-main: #000000;
+  --color-text-secondary: #000000;
+  --color-text-tertiary: #000000;
   
   --color-border: rgba(0, 0, 0, 0.08);
   --color-divider: rgba(0, 0, 0, 0.05);

@@ -2,8 +2,17 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  /* padding: 2rem; Remove padding to fit dock */
   text-align: center;
+}
+
+.App {
+  min-height: 100vh; /* Or 100% of host */
+  width: 100%;
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  position: relative; /* Context for absolute items */
 }
 
 @media (prefers-reduced-motion: no-preference) {
