@@ -38,11 +38,11 @@
   align-items: center;
   gap: 4px;
   margin-right: 8px;
-  color: #1a1a1a;
+  color: var(--color-text-main);
 }
 
 .brandIcon {
-  background: #1a1a1a;
+  background: var(--color-text-main);
   color: #fff;
   padding: 6px;
   border-radius: 8px;
@@ -108,6 +108,11 @@
   color: #333;
 }
 
+:global([data-theme='dark']) .stackItem.addStack:hover {
+  border-color: #fff;
+  color: #fff;
+}
+
 .stackLabelWrapper {
   display: flex;
   align-items: center;
@@ -137,7 +142,7 @@
   align-items: center;
   gap: 12px;
   margin-left: 8px; 
-  color: #666;
+  color: var(--color-text-secondary);
 }
 
 .actionButton {
@@ -150,7 +155,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #333;
+  color: var(--color-text-main);
 }
 
 .divider {
@@ -230,6 +235,11 @@
   color: #fff;
 }
 
+:global([data-theme='dark']) .brandIcon {
+  background: #fff;
+  color: #000;
+}
+
 :global([data-theme='dark']) .stackItem {
   background: #333;
   color: #ccc;
@@ -270,4 +280,29 @@
 :global([data-theme='dark']) .optionsButton:hover {
   color: #fff;
   background: rgba(255,255,255,0.1);
+}
+
+.stackBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: #ff3b30;
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  height: 16px;
+  min-width: 16px;
+  padding: 0 4px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  z-index: 10;
+  pointer-events: none;
+}
+
+:global([data-theme='dark']) .stackBadge {
+  border-color: #1a1a1a;
 }

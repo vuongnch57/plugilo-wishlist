@@ -103,6 +103,9 @@ export const Dock: React.FC = () => {
                       style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                     >
                        <IconComponent size={24} color={isDragTarget ? '#FFF' : (activeStackId === stack.id ? '#007AFF' : '#666')} />
+                       {stack.cardIds.length > 0 && (
+                          <div className={styles.stackBadge}>{stack.cardIds.length}</div>
+                       )}
                     </motion.div>
                     <div className={styles.stackLabelWrapper}>
                        <div className={styles.stackLabel}>{stack.title}</div>
