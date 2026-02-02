@@ -52,7 +52,8 @@ export const StackView: React.FC = () => {
 
     // Check if dropped on a stack
     if (clientX && clientY) {
-      const elements = document.elementsFromPoint(clientX, clientY);
+      const root = deckRef.current?.getRootNode() as Document | ShadowRoot;
+      const elements = root?.elementsFromPoint ? root.elementsFromPoint(clientX, clientY) : document.elementsFromPoint(clientX, clientY);
       const stackElement = elements.find(el => el.getAttribute('data-stack-id'));
 
       if (stackElement) {
@@ -93,7 +94,8 @@ export const StackView: React.FC = () => {
     // Detect drag over
     // @ts-ignore
     const point = info.point;
-    const elements = document.elementsFromPoint(point.x, point.y);
+    const root = deckRef.current?.getRootNode() as Document | ShadowRoot;
+    const elements = root?.elementsFromPoint ? root.elementsFromPoint(point.x, point.y) : document.elementsFromPoint(point.x, point.y);
     const stackElement = elements.find(el => el.getAttribute('data-stack-id'));
     const targetId = stackElement ? stackElement.getAttribute('data-stack-id') : null;
 
