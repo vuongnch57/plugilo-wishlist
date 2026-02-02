@@ -2,6 +2,8 @@
 
 A detailed, interactive "Dock" style wishlist widget built with React, TypeScript, and Vite. It supports creating stacks of cards, drag-and-drop organization, and can be embedded into any website as a Web Component.
 
+**[Live Demo](https://plugilo-wishlist.vercel.app/)**
+
 ## Setup Instructions
 
 1.  **Prerequisites**: Node.js installed.
