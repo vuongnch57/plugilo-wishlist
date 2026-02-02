@@ -25,7 +25,7 @@ const ICONS_MAP: Record<string, React.ElementType> = {
 type ActivePopover = 'none' | 'menu' | 'stack' | 'card' | 'search';
 
 export const Dock: React.FC = () => {
-  const { itemsOpen, toggleDock, stacks, activeStackId, dragOverStackId, setActiveStack, addStack, addCard, allCards, removeStack, updateStack } = useStore();
+  const { itemsOpen, toggleDock, stacks, activeStackId, dragOverStackId, setActiveStack, addStack, addCard, allCards, removeStack } = useStore();
   const [activePopover, setActivePopover] = useState<ActivePopover>('none');
   const [searchQuery, setSearchQuery] = useState('');
   const [stackOptions, setStackOptions] = useState<{ id: string, x: number, y: number } | null>(null);
