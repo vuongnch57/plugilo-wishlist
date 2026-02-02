@@ -45,7 +45,11 @@ export const CreateCardPopover: React.FC<CreateCardPopoverProps> = ({
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 100);
       // Update selected stack if activeStackId changes or just initial open
-      if (activeStackId) setSelectedStackId(activeStackId);
+      if (activeStackId) {
+        setSelectedStackId(activeStackId);
+      } else if (stacks.length > 0 && !selectedStackId) {
+        setSelectedStackId(stacks[0].id);
+      }
     } else {
       setTitle('');
       setDescription('');
