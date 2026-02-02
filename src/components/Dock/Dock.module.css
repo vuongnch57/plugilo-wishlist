@@ -42,7 +42,7 @@
 }
 
 .brandIcon {
-  background: var(--color-text-main);
+  background: #1a1a1a;
   color: #fff;
   padding: 6px;
   border-radius: 8px;

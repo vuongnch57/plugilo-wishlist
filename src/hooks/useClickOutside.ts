@@ -9,7 +9,12 @@ export const useClickOutside = <T extends HTMLElement = HTMLElement>(
   useEffect(() => {
     const listener = (event: Event) => {
       const el = ref?.current;
-      if (!el || el.contains((event?.target as Node) || null)) {
+      if (!el) return;
+
+      // Check if click comes from inside the element (supports Shadow DOM)
+      if (event.composedPath) {
+        if (event.composedPath().includes(el)) return;
+      } else if (el.contains((event?.target as Node) || null)) {
         return;
       }
 
